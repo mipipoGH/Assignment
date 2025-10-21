@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: view(#{register.title}, ~{::body})">">
+<body class="login-body">
+
+<!-- Form đăng ký căn giữa -->
+<div class="d-flex justify-content-center align-items-center" style="min-height:100vh;">
+    <div class="login-card">
+        <h3 th:text="#{register.title}"></h3>
+
+        <form th:action="@{/register}" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label" th:text="#{register.username}"></label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label" th:text="#{register.email}"></label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label" th:text="#{register.password}"></label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label" th:text="#{register.confirmPassword}"></label>
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+            </div>
+
+            <button type="submit" class="btn btn-login" th:text="#{register.button}"></button>
+        </form>
+
+        <p class="text-center text-muted mt-3 mb-0">
+            <span th:text="#{register.haveAccount}"></span>
+            <a th:href="@{/home/login}" th:text="#{login.title}"></a>
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

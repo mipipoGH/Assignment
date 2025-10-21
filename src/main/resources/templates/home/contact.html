@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: view(#{contact.title}, ~{::body})">">
+<body>
+<main class="container mt-5">
+    <h2 class="text-center mb-4" th:text="#{contact.title}"></h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form>
+                <div class="mb-3">
+                    <label for="name" class="form-label" th:text="#{contact.name}"></label>
+                    <input type="text" class="form-control" id="name" th:placeholder="#{contact.name}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label" th:text="#{contact.email}"></label>
+                    <input type="email" class="form-control" id="email" th:placeholder="#{contact.email}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="message" class="form-label" th:text="#{contact.message}"></label>
+                    <textarea class="form-control" id="message" rows="4" th:placeholder="#{contact.message}"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100" th:text="#{contact.submit}"></button>
+            </form>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <p><strong th:text="#{contact.email} + ':'"></strong> support@example.com</p>
+        <p><strong th:text="#{contact.phone} + ':'"></strong> 0123 456 789</p>
+        <p><strong th:text="#{contact.address} + ':'"></strong> 123 Đường ABC, Quận XYZ, TP.HCM</p>
+    </div>
+</main>
+</body>
+</html>

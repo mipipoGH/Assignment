@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: view(#{login.title}, ~{::body})">">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{login.title}"></title>
+</head>
+<body>
+
+<div class="d-flex justify-content-center align-items-center" style="min-height:80vh;">
+    <div class="card shadow-sm p-4" style="width: 400px;">
+        <h3 class="text-center mb-4" th:text="#{login.title}"></h3>
+
+        <form th:action="@{/login}" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label" th:text="#{login.username}"></label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label" th:text="#{login.password}"></label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                    <label class="form-check-label" for="remember" th:text="#{login.remember}"></label>
+                </div>
+                <a href="#" class="small text-decoration-none" th:text="#{login.forgot}"></a>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100" th:text="#{login.button}"></button>
+        </form>
+
+        <p class="text-center mt-3 mb-0">
+            <span th:text="#{login.noAccount}"></span>
+            <a th:href="@{/home/register}" th:text="#{login.register}"></a>
+        </p>
+    </div>
+</div>
+</body>
+</html>

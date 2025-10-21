@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: view(#{about.title}, ~{::body})">">
+<head>
+    <title th:text="#{about.title}">About</title>
+</head>
+<body>
+<section>
+    <h2 th:text="#{about.title}">About Us</h2>
+    <p th:text="#{about.description}">We are a leading electronics retailer.</p>
+</section>
+</body>
+</html>
+

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: view(#{cart.title}, ~{::body})">">
+
+<body>
+
+
+  <div class="container my-5">
+    <h2 class="mb-4" th:text="#{cart.title}">aaa</h2>
+  <!-- Giỏ hàng trống -->
+  <div th:if="${#lists.isEmpty(items)}">
+    <p th:text="#{cart.empty}"></p>
+  </div>
+
+  <!-- Giỏ hàng có sản phẩm -->
+  <div th:if="${!#lists.isEmpty(items)}">
+    <table class="table table-bordered align-middle">
+      <thead class="table-light">
+      <tr>
+        <th>#</th>
+        <th th:text="#{cart.image}"></th>
+        <th th:text="#{cart.name}"></th>
+        <th th:text="#{cart.price}"></th>
+        <th th:text="#{cart.quantity}"></th>
+        <th th:text="#{cart.total}"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="item, iterStat : ${items}">
+        <td th:text="${iterStat.count}"></td>
+        <td>
+          <img th:src="@{${item.image}}" alt="" style="width:80px; height:80px; object-fit:cover;">
+        </td>
+        <td th:text="${item.productName}"></td>
+        <td th:text="${item.price} + ' ₫'"></td>
+        <td>
+          <input type="number" class="form-control" min="1" th:value="1">
+        </td>
+        <td th:text="${item.price} + ' ₫'"></td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="text-end mt-3">
+      <h4>
+        <span th:text="#{cart.totalAmount}"></span>:
+        <span th:text="${totalAmount} + ' $'"></span>
+      </h4>
+    </div>
+
+    <div class="text-end mt-3">
+      <a class="btn btn-success" th:text="#{cart.checkout}" href="#"></a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

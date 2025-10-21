@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> <meta charset="UTF-8"></head>
+<body>
+<nav th:fragment="menu" class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+
+        <!-- Menu bên trái -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link" th:href="@{/home/index}" th:text="#{menu.home}">Home</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/home/product}" th:text="#{menu.products}">Products</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/home/about}" th:text="#{menu.about}">About</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/home/contact}" th:text="#{menu.contact}">Contact</a></li>
+        </ul>
+
+        <!-- Menu bên phải -->
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item me-3">
+                <a class="nav-link position-relative" th:href="@{/home/cart}">
+                    🛒
+                    <span class="ms-1" th:text="#{menu.cart}">Cart</span>
+                    <!-- Badge hiển thị số lượng -->
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            36
+                            <span class="visually-hidden">items in cart</span>
+                        </span>
+                </a>
+            </li>
+            <!-- Đăng ký | Đăng nhập -->
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/home/register}" th:text="#{menu.register}">Đăng Ký</a>
+            </li>
+            <li class="nav-item">
+                <span class="nav-link">|</span>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/home/login}" th:text="#{menu.login}">Đăng Nhập</a>
+            </li>
+
+            <!-- Dropdown chọn ngôn ngữ -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    🌐 <span th:text="#{menu.language}">Language</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="langDropdown">
+                    <li><a class="dropdown-item" href="?lang=vi">🇻🇳 Tiếng Việt</a></li>
+                    <li><a class="dropdown-item" href="?lang=en">🇺🇸 English</a></li>
+                </ul>
+            </li>
+
+        </ul>
+    </div>
+</nav>
+</body>
+</html>
