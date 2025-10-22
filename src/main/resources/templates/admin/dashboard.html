@@ -48,16 +48,6 @@
             font-size: 2.5rem;
             color: #0d6efd;
         }
-        .stat-box {
-            padding: 25px;
-            border-radius: 15px;
-            background: white;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        }
-        .stat-icon {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 
@@ -70,7 +60,6 @@
     <a th:href="@{/admin/products}"><i class="bi bi-box-seam me-2"></i> Quản lý sản phẩm</a>
     <a th:href="@{/admin/orders}"><i class="bi bi-bag-check me-2"></i> Quản lý đơn hàng</a>
     <a th:href="@{/admin/users}"><i class="bi bi-people me-2"></i> Quản lý khách hàng</a>
-    <a th:href="@{/admin/promotions}"><i class="bi bi-percent me-2"></i> Quản lý khuyến mãi</a>
     <hr class="text-white">
     <a th:href="@{/logout}" class="text-danger"><i class="bi bi-box-arrow-right me-2"></i> Đăng xuất</a>
 </div>
@@ -82,49 +71,22 @@
 
         <div class="row g-4">
             <!-- Card Sản phẩm -->
-            <div class="col-md-3">
-                <div class="card shadow-sm border-0 text-center">
-                    <div class="card-body">
                         <div class="icon-box mb-3"><i class="bi bi-box-seam"></i></div>
                         <h5 class="card-title fw-bold">Sản phẩm</h5>
-                        <p class="text-muted">Quản lý danh sách sản phẩm.</p>
-                        <a th:href="@{/admin/products}" class="btn btn-outline-primary btn-sm">Xem chi tiết</a>
                     </div>
                 </div>
             </div>
 
             <!-- Card Đơn hàng -->
-            <div class="col-md-3">
-                <div class="card shadow-sm border-0 text-center">
-                    <div class="card-body">
                         <div class="icon-box mb-3"><i class="bi bi-bag-check"></i></div>
                         <h5 class="card-title fw-bold">Đơn hàng</h5>
-                        <p class="text-muted">Theo dõi và xử lý đơn hàng.</p>
-                        <a th:href="@{/admin/orders}" class="btn btn-outline-success btn-sm">Xem chi tiết</a>
                     </div>
                 </div>
             </div>
 
             <!-- Card Khách hàng -->
-            <div class="col-md-3">
-                <div class="card shadow-sm border-0 text-center">
-                    <div class="card-body">
                         <div class="icon-box mb-3"><i class="bi bi-people"></i></div>
                         <h5 class="card-title fw-bold">Khách hàng</h5>
-                        <p class="text-muted">Danh sách người dùng.</p>
-                        <a th:href="@{/admin/users}" class="btn btn-outline-warning btn-sm text-dark">Xem chi tiết</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card Khuyến mãi -->
-            <div class="col-md-3">
-                <div class="card shadow-sm border-0 text-center">
-                    <div class="card-body">
-                        <div class="icon-box mb-3"><i class="bi bi-percent"></i></div>
-                        <h5 class="card-title fw-bold">Khuyến mãi</h5>
-                        <p class="text-muted">Thêm/sửa chương trình.</p>
-                        <a th:href="@{/admin/promotions}" class="btn btn-outline-danger btn-sm">Xem chi tiết</a>
                     </div>
                 </div>
             </div>
@@ -132,33 +94,19 @@
 
         <!-- Phần thống kê -->
         <div class="mt-5">
-            <h4 class="fw-bold mb-3"><i class="bi bi-bar-chart-line me-2"></i>Thống kê tổng quan</h4>
-            <div class="row g-4 text-center">
                 <div class="col-md-3">
-                    <div class="stat-box">
-                        <div class="stat-icon text-primary"><i class="bi bi-box-seam"></i></div>
-                        <h2 class="fw-bold text-primary" th:text="${#lists.size(products)}">0</h2>
                         <p class="text-muted mb-0">Sản phẩm</p>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="stat-box">
-                        <div class="stat-icon text-success"><i class="bi bi-bag-check"></i></div>
-                        <h2 class="fw-bold text-success" th:text="${ordersCount}">0</h2>
                         <p class="text-muted mb-0">Đơn hàng</p>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="stat-box">
-                        <div class="stat-icon text-warning"><i class="bi bi-people"></i></div>
-                        <h2 class="fw-bold text-warning" th:text="${usersCount}">0</h2>
                         <p class="text-muted mb-0">Khách hàng</p>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="stat-box">
-                        <div class="stat-icon text-danger"><i class="bi bi-percent"></i></div>
-                        <h2 class="fw-bold text-danger" th:text="${promotionsCount}">0</h2>
                         <p class="text-muted mb-0">Khuyến mãi</p>
                     </div>
                 </div>

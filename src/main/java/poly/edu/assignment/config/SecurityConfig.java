@@ -50,16 +50,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .successHandler((request, response, authentication) -> {
-                            String role = authentication.getAuthorities().iterator().next().getAuthority();
-                            if (role.equals("ROLE_ADMIN")) {
-                                response.sendRedirect("/admin/dashboard");
-                            } else if (role.equals("ROLE_STAFF") || role.equals("ROLE_DELIVERY")) {
-                                response.sendRedirect("/home/index");
-                            } else {
-                                response.sendRedirect("/home?role=khachhang");
-                            }
-                        })
+                        .defaultSuccessUrl("/login-success", true)
                         .permitAll()
                 )
 

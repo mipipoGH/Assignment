@@ -1,13 +1,15 @@
 package poly.edu.assignment.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import poly.edu.assignment.service.SanPhamService;
+import poly.edu.assignment.service.*;
 
 @Controller
 @RequestMapping("/products")
 public class ProductController {
+
     private final SanPhamService spService;
 
     public ProductController(SanPhamService spService) {

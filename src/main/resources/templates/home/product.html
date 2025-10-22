@@ -7,15 +7,28 @@
 
 <div th:replace="~{layout :: layout(~{::content})}">
   <th:block th:fragment="content">
-    <div>
-        <h3 class="mb-4">Tất cả sản phẩm</h3>
-        <div class="products-grid">
-            <div class="card" th:each="sp : ${products}">
-                <img th:src="@{/images/{id}.jpg(id=${sp.maSP})}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 th:text="${sp.tenSP}" class="card-title"></h5>
-                    <p th:text="${#numbers.formatDecimal(sp.donGia,0,'COMMA',0,'POINT')} + ' ₫'" class="card-price"></p>
-                    <a th:href="@{/products/{id}(id=${sp.maSP})}" class="btn btn-outline w-100 btn-sm">Xem chi tiết</a>
+    
+    <div class="modern-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Tất cả sản phẩm</h1>
+            <p class="page-subtitle">Khám phá bộ sưu tập đầy đủ các sản phẩm công nghệ chất lượng cao</p>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="product-grid">
+            <div class="product-card animate-fade-in-up" th:each="sp : ${products}">
+                <img th:src="@{/images/products/{id}.jpg(id=${sp.maSP})}" 
+                     onerror="this.src='/images/products/' + this.getAttribute('data-product-id') + '.png'"
+                     th:attr="data-product-id=${sp.maSP}"
+                     class="product-image" 
+                     th:alt="${sp.tenSP}">
+                <div class="product-info">
+                    <h3 th:text="${sp.tenSP}" class="product-title"></h3>
+                    <div th:text="${#numbers.formatDecimal(sp.donGia,0,'COMMA',0,'POINT')} + ' ₫'" class="product-price"></div>
+                    <a th:href="@{/products/{id}(id=${sp.maSP})}" class="btn-modern btn-outline w-100">
+                        <i class="bi bi-eye me-2"></i>Xem chi tiết
+                    </a>
                 </div>
             </div>
         </div>

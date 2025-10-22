@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      th:replace="layout :: layout(~{::body})">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: view(#{contact.title}, ~{::body})">">
 <body>
 <main class="container mt-5">
     <h2 class="text-center mb-4" th:text="#{contact.title}"></h2>
