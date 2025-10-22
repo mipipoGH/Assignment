@@ -31,6 +31,21 @@ public class HoaDonService {
         this.khRepo = khRepo;
     }
 
+    public java.util.List<HoaDon> findAll() {
+        return hdRepo.findAll();
+    }
+
+    public java.util.Optional<HoaDon> findById(String maHD) {
+        return hdRepo.findById(maHD);
+    }
+
+    public HoaDon save(HoaDon hoaDon) {
+        return hdRepo.save(hoaDon);
+    }
+
+    public void delete(String maHD) {
+        hdRepo.deleteById(maHD);
+    }
     /**
      * Đặt hàng (tạo hóa đơn + chi tiết hóa đơn)
      */
@@ -90,4 +105,5 @@ public class HoaDonService {
         hd.setTongTien(total);
         return hdRepo.save(hd);
     }
+
 }

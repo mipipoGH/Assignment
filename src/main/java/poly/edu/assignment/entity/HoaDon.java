@@ -36,4 +36,6 @@ public class HoaDon {
 
     @OneToMany(mappedBy = "hoaDon", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChiTietHD> chiTiet = new ArrayList<>();
+
+
 }

@@ -1,0 +1,48 @@
+<!-- templates/admin/promotion-form.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}">Thêm/Sửa khuyến mãi</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="container mt-4">
+    <h2 th:text="${title}">Thêm/Sửa khuyến mãi</h2>
+
+    <form th:action="@{${promotion.maKM} == null ? '/admin/promotions/create' : '/admin/promotions/update'}" th:object="${promotion}" method="post">
+        <div class="mb-3">
+            <label for="maKM" class="form-label">Mã khuyến mãi</label>
+            <input type="text" th:field="*{maKM}" id="maKM" class="form-control" placeholder="KM01" th:readonly="${promotion.maKM != null}" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="tenKM" class="form-label">Tên khuyến mãi</label>
+            <input type="text" th:field="*{tenKM}" id="tenKM" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="giaTri" class="form-label">Giá trị (%)</label>
+            <input type="number" th:field="*{giaTri}" id="giaTri" class="form-control" min="1" max="100" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="ngayBatDau" class="form-label">Ngày bắt đầu</label>
+            <input type="date" th:field="*{ngayBatDau}" id="ngayBatDau" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="ngayKetThuc" class="form-label">Ngày kết thúc</label>
+            <input type="date" th:field="*{ngayKetThuc}" id="ngayKetThuc" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="dieuKien" class="form-label">Điều kiện áp dụng</label>
+            <input type="text" th:field="*{dieuKien}" id="dieuKien" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-success">Lưu</button>
+        <a th:href="@{/admin/promotions}" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>
+</body>
+</html>

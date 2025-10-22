@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${title} ?: 'Form khách hàng'">Form khách hàng</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link th:href="@{/css/site.css}" rel="stylesheet" />
+</head>
+<body>
+<!-- MENU -->
+
+<main class="container py-4">
+    <h2 th:text="${title}">Form khách hàng</h2>
+
+    <form th:action="@{${user.maKH} == null ? '/admin/users/create' : '/admin/users/update'}" method="post" th:object="${user}">
+        <div class="mb-3">
+            <label for="maKH" class="form-label">Mã Khách Hàng</label>
+            <input type="text" id="maKH" name="maKH" class="form-control" th:field="*{maKH}" th:readonly="${user.maKH != null}" />
+        </div>
+
+        <div class="mb-3">
+            <label for="hoTen" class="form-label">Họ Tên</label>
+            <input type="text" id="hoTen" name="hoTen" class="form-control" th:field="*{hoTen}" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" name="email" class="form-control" th:field="*{email}" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="sdt" class="form-label">Số Điện Thoại</label>
+            <input type="text" id="sdt" name="sdt" class="form-control" th:field="*{sdt}" />
+        </div>
+
+        <div class="mb-3">
+            <label for="matKhau" class="form-label">Mật Khẩu</label>
+            <input type="password" id="matKhau" name="matKhau" class="form-control" th:field="*{matKhau}" />
+            <small class="form-text text-muted">Để trống nếu không muốn đổi mật khẩu</small>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <a th:href="@{/admin/users}" class="btn btn-secondary">Hủy</a>
+    </form>
+
+
+<footer class="text-center text-muted py-3 border-top">
+    © 2025 — Electronics Store
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
