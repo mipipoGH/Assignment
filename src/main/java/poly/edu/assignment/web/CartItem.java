@@ -28,5 +28,8 @@ public class CartItem {
 
     public int getQty() { return qty; }
     public void setQty(int qty) { this.qty = qty; }
-}
 
+    public BigDecimal getTongTien() {
+        return donGia.multiply(BigDecimal.valueOf(qty));
+    }
+}

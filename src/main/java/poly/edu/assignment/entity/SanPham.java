@@ -31,4 +31,7 @@ public class SanPham {
     @ManyToOne
     @JoinColumn(name = "MaLoai") // ✅ trùng với bảng LOAISP
     private LoaiSP loai;
+    @Column(name="Extension") // mới
+    private String extension; // "jpg" hoặc "png"
+
 }

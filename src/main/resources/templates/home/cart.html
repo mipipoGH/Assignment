@@ -4,106 +4,148 @@
 <th:block th:fragment="content">
 
     <style>
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+        .empty-cart-section {
+            text-align: center;
+            padding: 4rem 2rem;
         }
-        .page-wrapper {
-            max-width: 1100px;
-            margin: 60px auto;
-            padding: 20px;
+        
+        .empty-cart-icon {
+            font-size: 4rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
         }
-        .glass-box {
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-            color: #fff;
+        
+        .cart-total-section {
+            background: linear-gradient(135deg, var(--surface), var(--border-light));
+            padding: 2rem;
+            border-radius: var(--radius-xl);
+            margin-top: 2rem;
+            text-align: center;
         }
-        table.table {
-            color: #fff;
+        
+        .total-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
         }
-        table.table thead th {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        
+        .product-image-cart {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .quantity-badge {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-lg);
             font-weight: 600;
+            display: inline-block;
+            min-width: 50px;
+            text-align: center;
         }
-        table.table td, table.table th {
-            border-color: rgba(255, 255, 255, 0.1) !important;
-        }
-        .btn-outline-danger {
-            color: #ff6b6b;
-            border-color: #ff6b6b;
-        }
-        .btn-outline-danger:hover {
-            background: #ff6b6b;
-            color: #fff;
-        }
-        .btn-success {
-            background: #2ecc71;
+        
+        .btn-remove {
+            background: var(--error);
+            color: white;
             border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
         }
-        .btn-success:hover {
-            opacity: 0.85;
-        }
-        h3, h5, span.text-danger {
-            color: #fff !important;
+        
+        .btn-remove:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            color: white;
         }
     </style>
 
-    <div class="page-wrapper">
-        <div class="glass-box">
-            <h3 class="mb-4 text-center fw-bold">
-                <i class="bi bi-cart-check"></i> Giỏ hàng của bạn
-            </h3>
+    <div class="modern-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Giỏ hàng của bạn</h1>
+            <p class="page-subtitle">Xem lại các sản phẩm bạn đã chọn trước khi thanh toán</p>
+        </div>
 
-            <!-- Nếu giỏ hàng trống -->
-            <div th:if="${#lists.isEmpty(cart)}" class="text-center py-4">
-                <i class="bi bi-emoji-frown display-5 d-block mb-3"></i>
-                <h5>Giỏ hàng của bạn đang trống</h5>
-                <a th:href="@{/san-pham}" class="btn btn-light mt-3">Mua sắm ngay</a>
+        <!-- Nếu giỏ hàng trống -->
+        <div th:if="${#lists.isEmpty(cart)}" class="modern-card">
+            <div class="empty-cart-section">
+                <div class="empty-cart-icon">🛒</div>
+                <h3 style="color: var(--text-primary); margin-bottom: 1rem;">Giỏ hàng của bạn đang trống</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">Hãy khám phá các sản phẩm tuyệt vời của chúng tôi!</p>
+                <a th:href="@{/products}" class="btn-modern btn-primary">
+                    <i class="bi bi-bag me-2"></i>Mua sắm ngay
+                </a>
             </div>
+        </div>
 
-            <!-- Nếu có sản phẩm -->
-            <div th:if="${!#lists.isEmpty(cart)}">
-                <table class="table align-middle">
+        <!-- Nếu có sản phẩm -->
+        <div th:if="${!#lists.isEmpty(cart)}">
+            <div class="modern-table">
+                <table class="table mb-0">
                     <thead>
                     <tr>
                         <th>Sản phẩm</th>
                         <th>Đơn giá</th>
                         <th>Số lượng</th>
                         <th>Tạm tính</th>
-                        <th></th>
+                        <th>Thao tác</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="item : ${cart}">
-                        <td th:text="${item.tenSP}"></td>
-                        <td th:text="${#numbers.formatDecimal(item.donGia,0,'COMMA',0,'POINT')} + ' ₫'"></td>
-                        <td th:text="${item.qty}"></td>
-                        <td th:text="${#numbers.formatDecimal(item.donGia.multiply(T(java.math.BigDecimal).valueOf(item.qty)),0,'COMMA',0,'POINT')} + ' ₫'"></td>
                         <td>
-                            <a th:href="@{/cart/remove/{id}(id=${item.maSP})}" class="btn btn-sm btn-outline-danger">
-                                <i class="bi bi-trash"></i> Xóa
+                            <div class="d-flex align-items-center">
+                                <img th:src="@{/images/products/{id}.jpg(id=${item.maSP})}" 
+                                     onerror="this.src='/images/products/' + this.getAttribute('data-product-id') + '.png'"
+                                     th:attr="data-product-id=${item.maSP}"
+                                     class="product-image-cart me-3"
+                                     th:alt="${item.tenSP}">
+                                <div>
+                                    <h6 style="color: var(--text-primary); margin-bottom: 0.25rem; font-weight: 600;" th:text="${item.tenSP}"></h6>
+                                    <small style="color: var(--text-muted);">Mã: <span th:text="${item.maSP}"></span></small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span style="color: var(--accent-color); font-weight: 600;" th:text="${#numbers.formatDecimal(item.donGia,0,'COMMA',0,'POINT')} + ' ₫'"></span>
+                        </td>
+                        <td>
+                            <span class="quantity-badge" th:text="${item.qty}"></span>
+                        </td>
+                        <td>
+                            <span style="color: var(--text-primary); font-weight: 700;" th:text="${#numbers.formatDecimal(item.donGia.multiply(T(java.math.BigDecimal).valueOf(item.qty.longValue())),0,'COMMA',0,'POINT')} + ' ₫'"></span>
+                        </td>
+                        <td>
+                            <a th:href="@{/cart/remove/{id}(id=${item.maSP})}" class="btn-remove">
+                                <i class="bi bi-trash me-1"></i>Xóa
                             </a>
                         </td>
                     </tr>
                     </tbody>
                 </table>
+            </div>
 
-                <div class="text-end mt-3">
-                    <h5>Tổng cộng:
-                        <span class="text-danger fw-bold"
-                              th:text="${#numbers.formatDecimal(total,0,'COMMA',0,'POINT')} + ' ₫'"></span>
-                    </h5>
-                    <a th:href="@{/checkout}" class="btn btn-success mt-3">
-                        <i class="bi bi-credit-card"></i> Thanh toán
+            <!-- Cart Total -->
+            <div class="cart-total-section">
+                <h4 style="color: var(--text-primary); margin-bottom: 1rem;">Tổng cộng</h4>
+                <div class="total-amount" th:text="${#numbers.formatDecimal(total,0,'COMMA',0,'POINT')} + ' ₫'"></div>
+                
+                <div class="d-flex gap-3 justify-content-center">
+                    <a th:href="@{/products}" class="btn-modern btn-outline">
+                        <i class="bi bi-arrow-left me-2"></i>Tiếp tục mua sắm
+                    </a>
+                    <a th:href="@{/checkout}" class="btn-modern btn-success">
+                        <i class="bi bi-credit-card me-2"></i>Thanh toán
                     </a>
                 </div>
             </div>
-
         </div>
     </div>
 
