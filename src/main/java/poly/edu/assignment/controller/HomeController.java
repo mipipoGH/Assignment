@@ -19,4 +19,8 @@ public class HomeController {
         model.addAttribute("products", spService.findAll());
         return "home/index";
     }
+    @GetMapping("/contact")
+    public String contact() {
+        return "home/contact"; // Trả về view contact.html trong thư mục templates
+    }
 }
