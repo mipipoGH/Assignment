@@ -19,4 +19,5 @@ public class HomeController {
         model.addAttribute("products", spService.findAll());
         return "home/index";
     }
+
 }

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}">
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+        .sidebar {
+            width: 230px;
+            height: 100vh;
+            background-color: #0d6efd;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 30px;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 12px 20px;
+            transition: background 0.3s;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #0b5ed7;
+        }
+        .content {
+            margin-left: 240px;
+            padding: 30px;
+        }
+        .card {
+            border-radius: 15px;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        .icon-box {
+            font-size: 2.5rem;
+            color: #0d6efd;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h4 class="text-center fw-bold mb-4">🛍️ Admin Panel</h4>
+    <a th:href="@{/admin/dashboard}" class="active"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
+    <a th:href="@{/admin/products}"><i class="bi bi-box-seam me-2"></i> Quản lý sản phẩm</a>
+    <a th:href="@{/admin/orders}"><i class="bi bi-bag-check me-2"></i> Quản lý đơn hàng</a>
+    <a th:href="@{/admin/users}"><i class="bi bi-people me-2"></i> Quản lý khách hàng</a>
+    <hr class="text-white">
+    <a th:href="@{/logout}" class="text-danger"><i class="bi bi-box-arrow-right me-2"></i> Đăng xuất</a>
+</div>
+
+<!-- Nội dung chính -->
+<div class="content">
+    <div class="container-fluid">
+        <h2 class="fw-bold mb-4"><i class="bi bi-speedometer2 me-2"></i>Bảng điều khiển</h2>
+
+        <div class="row g-4">
+            <!-- Card Sản phẩm -->
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <div class="icon-box mb-3"><i class="bi bi-box-seam"></i></div>
+                        <h5 class="card-title fw-bold">Sản phẩm</h5>
+                        <p class="card-text text-muted">Xem và quản lý toàn bộ sản phẩm trong hệ thống.</p>
+                        <a th:href="@{/admin/products}" class="btn btn-primary">Quản lý sản phẩm</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Đơn hàng -->
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <div class="icon-box mb-3"><i class="bi bi-bag-check"></i></div>
+                        <h5 class="card-title fw-bold">Đơn hàng</h5>
+                        <p class="card-text text-muted">Theo dõi trạng thái và chi tiết đơn hàng.</p>
+                        <a th:href="@{/admin/orders}" class="btn btn-success">Quản lý đơn hàng</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Khách hàng -->
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <div class="icon-box mb-3"><i class="bi bi-people"></i></div>
+                        <h5 class="card-title fw-bold">Khách hàng</h5>
+                        <p class="card-text text-muted">Xem danh sách và thông tin khách hàng.</p>
+                        <a th:href="@{/admin/users}" class="btn btn-warning text-white">Quản lý khách hàng</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phần thống kê -->
+        <div class="mt-5">
+            <h4 class="fw-bold mb-3"><i class="bi bi-graph-up me-2"></i>Thống kê tổng quan</h4>
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <div class="p-3 bg-white shadow-sm rounded-4">
+                        <h2 class="text-primary fw-bold" th:text="${#lists.size(products)}">0</h2>
+                        <p class="text-muted mb-0">Sản phẩm</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-white shadow-sm rounded-4">
+                        <h2 class="text-success fw-bold">25</h2>
+                        <p class="text-muted mb-0">Đơn hàng</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-white shadow-sm rounded-4">
+                        <h2 class="text-warning fw-bold">14</h2>
+                        <p class="text-muted mb-0">Khách hàng</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="p-3 bg-white shadow-sm rounded-4">
+                        <h2 class="text-danger fw-bold">5</h2>
+                        <p class="text-muted mb-0">Khuyến mãi</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

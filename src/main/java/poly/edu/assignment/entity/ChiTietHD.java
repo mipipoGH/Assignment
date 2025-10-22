@@ -1,4 +1,5 @@
 package poly.edu.assignment.entity;
+
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -28,4 +29,10 @@ public class ChiTietHD {
 
     @Column(name = "DonGia", precision = 18, scale = 2)
     private BigDecimal donGia;
+
+    // ✅ Phương thức tính thành tiền
+    public BigDecimal getThanhTien() {
+        if (donGia == null || soLuong == null) return BigDecimal.ZERO;
+        return donGia.multiply(BigDecimal.valueOf(soLuong));
+    }
 }

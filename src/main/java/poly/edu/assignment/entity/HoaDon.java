@@ -25,6 +25,10 @@ public class HoaDon {
     @JoinColumn(name = "MaNV")
     private NhanVien nhanVien;
 
+    @ManyToOne
+    @JoinColumn(name = "MaDC")
+    private DiaChi diaChi;
+
     @Column(name = "NgayLap")
     private LocalDate ngayLap;
 

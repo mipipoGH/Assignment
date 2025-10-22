@@ -4,90 +4,115 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import poly.edu.assignment.entity.*;
 import poly.edu.assignment.repository.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @Service
-@Transactional
 public class HoaDonService {
 
-    private final HoaDonRepository hdRepo;
-    private final ChiTietHDRepository cthdRepo;
-    private final SanPhamRepository spRepo;
-    private final KhachHangRepository khRepo;
+    private final HoaDonRepository hoaDonRepository;
+    private final ChiTietHDRepository chiTietHDRepository;
+    private final SanPhamRepository sanPhamRepository;
+    private final DiaChiRepository diaChiRepository;
 
-    public HoaDonService(
-            HoaDonRepository hdRepo,
-            ChiTietHDRepository cthdRepo,
-            SanPhamRepository spRepo,
-            KhachHangRepository khRepo
-    ) {
-        this.hdRepo = hdRepo;
-        this.cthdRepo = cthdRepo;
-        this.spRepo = spRepo;
-        this.khRepo = khRepo;
+    public HoaDonService(HoaDonRepository hoaDonRepository,
+                         ChiTietHDRepository chiTietHDRepository,
+                         SanPhamRepository sanPhamRepository,
+                         DiaChiRepository diaChiRepository) {
+        this.hoaDonRepository = hoaDonRepository;
+        this.chiTietHDRepository = chiTietHDRepository;
+        this.sanPhamRepository = sanPhamRepository;
+        this.diaChiRepository = diaChiRepository;
     }
 
-    /**
-     * Đặt hàng (tạo hóa đơn + chi tiết hóa đơn)
-     */
-    public HoaDon placeOrder(KhachHang kh, Map<String, Integer> cartItems) {
-        // Tạo mã hóa đơn ngẫu nhiên
+    @Transactional
+    public HoaDon placeOrder(KhachHang kh, Map<String, Integer> cartMap) {
+
+        // ✅ 1. Tạo mã hóa đơn duy nhất
         String maHD = "HD" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
 
-        // Lấy lại khách hàng từ DB (đảm bảo entity quản lý bởi JPA)
-        KhachHang customer = khRepo.findById(kh.getMaKH())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy khách hàng"));
+        // ✅ 2. Lấy địa chỉ mặc định của khách hàng
+        List<DiaChi> diaChiList = diaChiRepository.findByKhachHang(kh);
+        DiaChi diaChi = diaChiList.stream()
+                .filter(dc -> dc.getMacDinh() != null && dc.getMacDinh())
+                .findFirst()
+                .orElse(diaChiList.isEmpty() ? null : diaChiList.get(0));
 
-        // Tạo hóa đơn
-        HoaDon hd = new HoaDon();
-        hd.setMaHD(maHD);
-        hd.setKhachHang(customer);
-        hd.setNgayLap(LocalDate.now());
-        hd.setTrangThai("Chờ duyệt");
-        hd.setTongTien(BigDecimal.ZERO);
-
-        hdRepo.save(hd); // lưu trước để có thể gắn vào chi tiết
-
-        BigDecimal total = BigDecimal.ZERO;
-
-        for (var e : cartItems.entrySet()) {
-            String maSP = e.getKey();
-            int qty = e.getValue();
-
-            SanPham sp = spRepo.findById(maSP)
-                    .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm: " + maSP));
-
-            // Tạo khóa tổng hợp cho chi tiết hóa đơn
-            ChiTietHDKey key = new ChiTietHDKey(maHD, maSP);
-            ChiTietHD ct = new ChiTietHD();
-            ct.setId(key);
-            ct.setHoaDon(hd);
-            ct.setSanPham(sp);
-            ct.setSoLuong(qty);
-            ct.setDonGia(sp.getDonGia());
-
-
-            cthdRepo.save(ct);
-
-            // Cập nhật tồn kho
-            if (sp.getSoLuongTon() != null && sp.getSoLuongTon() >= qty) {
-                sp.setSoLuongTon(sp.getSoLuongTon() - qty);
-                spRepo.save(sp);
-            } else {
-                throw new RuntimeException("Sản phẩm " + sp.getTenSP() + " không đủ hàng tồn!");
-            }
-
-            // Cộng tổng tiền
-            total = total.add(sp.getDonGia().multiply(BigDecimal.valueOf(qty)));
-
+        // Nếu không có địa chỉ nào, tạo địa chỉ mặc định
+        if (diaChi == null) {
+            diaChi = createDefaultAddress(kh);
         }
 
-        // Cập nhật tổng tiền hóa đơn
-        hd.setTongTien(total);
-        return hdRepo.save(hd);
+        // ✅ 3. Tạo đối tượng hóa đơn
+        HoaDon hd = HoaDon.builder()
+                .maHD(maHD)
+                .khachHang(kh)
+                .diaChi(diaChi)
+                .nhanVien(null) // Có thể để null vì Allow Nulls = true
+                .ngayLap(LocalDate.now())
+                .trangThai("Chờ duyệt")
+                .tongTien(BigDecimal.ZERO)
+                .build();
+
+        hoaDonRepository.save(hd);
+
+        BigDecimal tongTien = BigDecimal.ZERO;
+
+        // ✅ 4. Lặp qua giỏ hàng và tạo chi tiết hóa đơn
+        for (Map.Entry<String, Integer> entry : cartMap.entrySet()) {
+            String maSP = entry.getKey();
+            Integer soLuong = entry.getValue();
+
+            SanPham sp = sanPhamRepository.findById(maSP)
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm có mã: " + maSP));
+
+            // Kiểm tra số lượng tồn kho
+            if (sp.getSoLuongTon() == null || sp.getSoLuongTon() < soLuong) {
+                throw new RuntimeException("Sản phẩm " + sp.getTenSP() + " không đủ hàng trong kho!");
+            }
+
+            // Trừ tồn kho
+            sp.setSoLuongTon(sp.getSoLuongTon() - soLuong);
+            sanPhamRepository.save(sp);
+
+            // ✅ Tạo chi tiết hóa đơn
+            ChiTietHDKey id = new ChiTietHDKey(maHD, maSP);
+            ChiTietHD ct = ChiTietHD.builder()
+                    .id(id)
+                    .hoaDon(hd)
+                    .sanPham(sp)
+                    .soLuong(soLuong)
+                    .donGia(sp.getDonGia())
+                    .build();
+
+            // ✅ Tính thành tiền
+            tongTien = tongTien.add(ct.getThanhTien());
+
+            chiTietHDRepository.save(ct);
+        }
+
+        // ✅ 5. Cập nhật tổng tiền và lưu hóa đơn
+        hd.setTongTien(tongTien);
+        hoaDonRepository.save(hd);
+
+        return hd;
+    }
+
+    private DiaChi createDefaultAddress(KhachHang khachHang) {
+        String maDC = "DC" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        DiaChi diaChi = DiaChi.builder()
+                .maDC(maDC)
+                .khachHang(khachHang)
+                .diaChi("Địa chỉ mặc định")
+                .tinh("TP. Hồ Chí Minh")
+                .huyen("Quận 1")
+                .xa("Phường Bến Nghé")
+                .macDinh(true)
+                .build();
+        
+        return diaChiRepository.save(diaChi);
     }
 }
