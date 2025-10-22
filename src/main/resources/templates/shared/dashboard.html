@@ -1,0 +1,80 @@
+<nav th:fragment="adminMenu" class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+  <div class="container">
+    <!-- Logo / Dashboard -->
+    <a class="navbar-brand fw-bold text-primary d-flex align-items-center" th:href="@{/admin/dashboard}">
+      <i class="bi bi-speedometer2 me-2"></i>
+      Admin Dashboard
+    </a>
+
+    <!-- Toggle khi thu nhỏ -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarAdmin" aria-controls="navbarAdmin"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Menu -->
+    <div class="collapse navbar-collapse" id="navbarAdmin">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/admin/products}">
+            <i class="bi bi-box-seam me-1"></i> Products
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/admin/categories}">
+            <i class="bi bi-tags me-1"></i> Categories
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/admin/users}">
+            <i class="bi bi-people me-1"></i> Users
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/admin/promotions}">
+            <i class="bi bi-gift me-1"></i> Promotions
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/admin/orders}">
+            <i class="bi bi-bag-check me-1"></i> Orders
+          </a>
+        </li>
+
+        <!-- Tài khoản / Đăng xuất -->
+        <li class="nav-item dropdown" th:if="${session.user != null}">
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userMenu"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle me-1"></i>
+            <span th:text="${session.user.hoTen}">Admin</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" th:href="@{/admin/profile}">
+              <i class="bi bi-gear me-2"></i> Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" th:href="@{/logout}">
+              <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất</a></li>
+          </ul>
+        </li>
+
+        <!-- Nếu chưa đăng nhập -->
+        <li class="nav-item" th:if="${session.user == null}">
+          <a class="btn btn-outline-primary btn-sm ms-lg-3" th:href="@{/login}">
+            <i class="bi bi-box-arrow-in-right me-1"></i> Đăng nhập
+          </a>
+        </li>
+        <li class="nav-item" th:if="${session.user == null}">
+          <a class="btn btn-primary btn-sm ms-2" th:href="@{/register}">
+            <i class="bi bi-person-plus me-1"></i> Đăng ký
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

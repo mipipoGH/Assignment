@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Đặt hàng thành công</title>
+</head>
+<body>
+
+<div th:replace="~{layout :: layout(~{::content})}">
+  <th:block th:fragment="content">
+    <div class="text-center mt-5">
+      <i class="bi bi-check-circle text-success" style="font-size:4rem"></i>
+      <h3 class="mt-3">Đặt hàng thành công!</h3>
+      <p>Cảm ơn bạn đã mua hàng tại Electronics Store.</p>
+      <a th:href="@{/}" class="btn btn-primary mt-3">Tiếp tục mua sắm</a>
+    </div>
+  </th:block>
+</div>
+
+</body>
+</html>
