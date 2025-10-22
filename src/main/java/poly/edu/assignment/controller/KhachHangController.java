@@ -1,5 +1,6 @@
 package poly.edu.assignment.controller;
 
+import org.springframework.web.bind.annotation.*;
 import poly.edu.assignment.entity.KhachHang;
 import poly.edu.assignment.service.KhachHangService;
 
