@@ -1,25 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: view(#{product.title}, ~{::body})">">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sản phẩm</title>
+</head>
 <body>
-<main class="container mt-5">
-  <h2 class="text-center mb-4" th:text="#{product.title}"></h2>
 
-  <div class="row">
-    <div class="col-md-3 mb-4" th:each="item : ${items}">
-      <div class="card h-100 shadow-sm">
-        <img th:src="@{${item.image}}" class="card-img-top" alt="Product Image">
-        <div class="card-body text-center">
-          <h5 th:text="${item.productName}"></h5>
-          <p th:text="#{product.price} + ': ' + ${item.price} + ' $'"></p>
-          <div class="d-flex justify-content-center gap-2">
-            <button class="btn btn-success" th:text="#{product.addToCart}"></button>
-            <button class="btn btn-primary" th:text="#{product.buy}"></button>
-          </div>
+<div th:replace="~{layout :: layout(~{::content})}">
+  <th:block th:fragment="content">
+    <div>
+        <h3 class="mb-4">Tất cả sản phẩm</h3>
+        <div class="products-grid">
+            <div class="card" th:each="sp : ${products}">
+                <img th:src="@{/images/{id}.jpg(id=${sp.maSP})}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 th:text="${sp.tenSP}" class="card-title"></h5>
+                    <p th:text="${#numbers.formatDecimal(sp.donGia,0,'COMMA',0,'POINT')} + ' ₫'" class="card-price"></p>
+                    <a th:href="@{/products/{id}(id=${sp.maSP})}" class="btn btn-outline w-100 btn-sm">Xem chi tiết</a>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+  </th:block>
+</div>
 
-</main>
 </body>
 </html>

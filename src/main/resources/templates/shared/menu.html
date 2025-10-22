@@ -1,56 +1,84 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head> <meta charset="UTF-8"></head>
-<body>
-<nav th:fragment="menu" class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
+<!-- templates/shared/menu.html -->
+<nav th:fragment="menu" class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+    <div class="container">
+        <!-- Logo / Home -->
+        <a class="navbar-brand fw-bold text-primary d-flex align-items-center" th:href="@{/}">
+            <i class="bi bi-lightning-charge-fill me-2"></i>
+            Electronics Store
+        </a>
 
-        <!-- Menu bên trái -->
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item"><a class="nav-link" th:href="@{/home/index}" th:text="#{menu.home}">Home</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/home/product}" th:text="#{menu.products}">Products</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/home/about}" th:text="#{menu.about}">About</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/home/contact}" th:text="#{menu.contact}">Contact</a></li>
-        </ul>
+        <!-- Toggle khi thu nhỏ -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <!-- Menu bên phải -->
-        <ul class="navbar-nav ms-auto">
-            <li class="nav-item me-3">
-                <a class="nav-link position-relative" th:href="@{/home/cart}">
-                    🛒
-                    <span class="ms-1" th:text="#{menu.cart}">Cart</span>
-                    <!-- Badge hiển thị số lượng -->
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            36
-                            <span class="visually-hidden">items in cart</span>
-                        </span>
-                </a>
-            </li>
-            <!-- Đăng ký | Đăng nhập -->
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/home/register}" th:text="#{menu.register}">Đăng Ký</a>
-            </li>
-            <li class="nav-item">
-                <span class="nav-link">|</span>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/home/login}" th:text="#{menu.login}">Đăng Nhập</a>
-            </li>
+        <!-- Menu -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
 
-            <!-- Dropdown chọn ngôn ngữ -->
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="langDropdown" role="button"
-                   data-bs-toggle="dropdown" aria-expanded="false">
-                    🌐 <span th:text="#{menu.language}">Language</span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="langDropdown">
-                    <li><a class="dropdown-item" href="?lang=vi">🇻🇳 Tiếng Việt</a></li>
-                    <li><a class="dropdown-item" href="?lang=en">🇺🇸 English</a></li>
-                </ul>
-            </li>
+                <!-- Trang chủ -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">
+                        <i class="bi bi-house-door me-1"></i> Trang chủ
+                    </a>
+                </li>
 
-        </ul>
+                <!-- Sản phẩm -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/products}">
+                        <i class="bi bi-grid me-1"></i> Sản phẩm
+                    </a>
+                </li>
+
+                <!-- Giỏ hàng -->
+                <li class="nav-item">
+                    <a class="nav-link position-relative" th:href="@{/cart}">
+                        <i class="bi bi-cart3 me-1"></i> Giỏ hàng
+                        <span th:if="${session.cart != null and #lists.size(session.cart) > 0}"
+                              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                              th:text="${#lists.size(session.cart)}">0</span>
+                    </a>
+                </li>
+
+                <!-- Liên hệ -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/contact}">
+                        <i class="bi bi-envelope me-1"></i> Liên hệ
+                    </a>
+                </li>
+
+                <!-- Nếu người dùng đã đăng nhập -->
+                <li class="nav-item dropdown" th:if="${session.user != null}">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userMenu"
+                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle me-1"></i>
+                        <span th:text="${session.user.hoTen}">Tài khoản</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" th:href="@{/tai-khoan}">
+                            <i class="bi bi-gear me-2"></i> Thông tin cá nhân</a></li>
+                        <li><a class="dropdown-item" th:href="@{/don-hang}">
+                            <i class="bi bi-bag-check me-2"></i> Đơn hàng của tôi</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" th:href="@{/logout}">
+                            <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất</a></li>
+                    </ul>
+                </li>
+
+                <!-- Nếu chưa đăng nhập -->
+                <li class="nav-item" th:if="${session.user == null}">
+                    <a class="btn btn-outline-primary btn-sm ms-lg-3" th:href="@{/login}">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Đăng nhập
+                    </a>
+                </li>
+                <li class="nav-item" th:if="${session.user == null}">
+                    <a class="btn btn-primary btn-sm ms-2" th:href="@{/register}">
+                        <i class="bi bi-person-plus me-1"></i> Đăng ký
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
-</body>
-</html>
