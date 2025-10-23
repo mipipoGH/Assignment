@@ -42,7 +42,12 @@
             <!-- Trạng thái -->
             <div class="mb-3">
                 <label for="trangThai" class="form-label">Trạng thái</label>
-                <input type="text" th:field="*{trangThai}" id="trangThai" class="form-control" placeholder="Nhập trạng thái" />
+                <select th:field="*{trangThai}" id="trangThai" class="form-select" required>
+                    <option value="">-- Chọn trạng thái --</option>
+                    <option value="Chờ duyệt">Chờ duyệt</option>
+                    <option value="Đang giao">Đang giao</option>
+                    <option value="Hoàn tất">Hoàn tất</option>
+                </select>
             </div>
 
             <!-- Tổng tiền -->

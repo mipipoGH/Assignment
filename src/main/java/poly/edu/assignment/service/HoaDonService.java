@@ -46,6 +46,15 @@ public class HoaDonService {
     public void delete(String maHD) {
         hdRepo.deleteById(maHD);
     }
+
+    public java.util.Map<String, Long> getOrderStatusStatistics() {
+        java.util.List<HoaDon> orders = findAll();
+        return orders.stream()
+                .collect(java.util.stream.Collectors.groupingBy(
+                    hd -> hd.getTrangThai() != null ? hd.getTrangThai() : "Không xác định",
+                    java.util.stream.Collectors.counting()
+                ));
+    }
     /**
      * Đặt hàng (tạo hóa đơn + chi tiết hóa đơn)
      */

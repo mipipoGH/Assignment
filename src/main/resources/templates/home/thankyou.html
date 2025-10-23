@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thanh toán thành công</title>
+</head>
+<body>
+<div th:replace="~{layout :: layout(~{::content})}">
+    <th:block th:fragment="content">
+
+        <div class="container py-5 text-center">
+            <div th:if="${hoaDon != null}">
+                <h2 class="text-success mb-3">🎉 Thanh toán thành công!</h2>
+                <p>Cảm ơn bạn đã đặt hàng. Mã hóa đơn của bạn là:
+                    <span class="fw-bold text-primary" th:text="${hoaDon.maHD}"></span>
+                </p>
+                <p>Tổng tiền: 
+                    <span class="text-danger fw-bold" 
+                          th:text="${#numbers.formatDecimal(hoaDon.tongTien,0,'COMMA',0,'POINT')} + ' ₫'"></span>
+                </p>
+                <div class="mt-4">
+                    <a th:href="@{/}" class="btn btn-primary me-2">Tiếp tục mua sắm</a>
+                    <a th:href="@{/products}" class="btn btn-outline-primary">Xem sản phẩm</a>
+                </div>
+            </div>
+            
+            <div th:if="${hoaDon == null}">
+                <h2 class="text-success mb-3">🎉 Đặt hàng thành công!</h2>
+                <p>Cảm ơn bạn đã đặt hàng. Đơn hàng của bạn đang được xử lý.</p>
+                <div class="mt-4">
+                    <a th:href="@{/}" class="btn btn-primary me-2">Tiếp tục mua sắm</a>
+                    <a th:href="@{/products}" class="btn btn-outline-primary">Xem sản phẩm</a>
+                </div>
+            </div>
+        </div>
+
+    </th:block>
+</div>
+</body>
+</html>

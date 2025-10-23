@@ -1,48 +1,73 @@
-<!-- templates/admin/promotion-form.html -->
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title th:text="${title}">Thêm/Sửa khuyến mãi</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+
+.form-section {
+background-color: #fff;
+padding: 25px 30px;
+border-radius: 15px;
+}
+</style>
 </head>
 <body>
-<div class="container mt-4">
-    <h2 th:text="${title}">Thêm/Sửa khuyến mãi</h2>
+<div class="container mt-5 mb-5">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-primary" th:text="${title}">Thêm/Sửa khuyến mãi</h3>
+        <a th:href="@{/admin/promotions}" class="btn btn-outline-secondary back-btn">
+            <i class="bi bi-arrow-left"></i> Quay lại trang khuyến mãi
+        </a>
+    </div>
 
-    <form th:action="@{${promotion.maKM} == null ? '/admin/promotions/create' : '/admin/promotions/update'}" th:object="${promotion}" method="post">
-        <div class="mb-3">
-            <label for="maKM" class="form-label">Mã khuyến mãi</label>
-            <input type="text" th:field="*{maKM}" id="maKM" class="form-control" placeholder="KM01" th:readonly="${promotion.maKM != null}" required />
+    <!-- Form -->
+    <div class="card">
+        <div class="card-body">
+            <form th:action="@{${promotion.maKM} == null ? '/admin/promotions/create' : '/admin/promotions/update'}"
+                  th:object="${promotion}" method="post">
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="maKM" class="form-label">Mã khuyến mãi</label>
+                        <input type="text" th:field="*{maKM}" id="maKM" class="form-control"
+                               placeholder="VD: KM01" th:readonly="${promotion.maKM != null}" required />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="tenKM" class="form-label">Tên khuyến mãi</label>
+                        <input type="text" th:field="*{tenKM}" id="tenKM" class="form-control"
+                               placeholder="VD: Giảm giá Laptop Gaming" required />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="giaTri" class="form-label">Giá trị (%)</label>
+                        <input type="number" th:field="*{giaTri}" id="giaTri" class="form-control"
+                               min="1" max="100" placeholder="VD: 10" required />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="ngayBatDau" class="form-label">Ngày bắt đầu</label>
+                        <input type="date" th:field="*{ngayBatDau}" id="ngayBatDau" class="form-control" required />
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="ngayKetThuc" class="form-label">Ngày kết thúc</label>
+                        <input type="date" th:field="*{ngayKetThuc}" id="ngayKetThuc" class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="dieuKien" class="form-label">Điều kiện áp dụng</label>
+                    <input type="text" th:field="*{dieuKien}" id="dieuKien" class="form-control"
+                           placeholder="VD: Áp dụng cho SP01" />
+                </div>
+
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="submit" class="btn btn-success me-2 px-4"
+                            th:text="${promotion.maKM} == null ? 'Thêm mới' : 'Lưu thay đổi'">
+                        Lưu
+                    </button>
+                    <a th:href="@{/admin/promotions}" class="btn btn-secondary px-4">Hủy</a>
+                </div>
+            </form>
         </div>
-
-        <div class="mb-3">
-            <label for="tenKM" class="form-label">Tên khuyến mãi</label>
-            <input type="text" th:field="*{tenKM}" id="tenKM" class="form-control" required />
-        </div>
-
-        <div class="mb-3">
-            <label for="giaTri" class="form-label">Giá trị (%)</label>
-            <input type="number" th:field="*{giaTri}" id="giaTri" class="form-control" min="1" max="100" required />
-        </div>
-
-        <div class="mb-3">
-            <label for="ngayBatDau" class="form-label">Ngày bắt đầu</label>
-            <input type="date" th:field="*{ngayBatDau}" id="ngayBatDau" class="form-control" required />
-        </div>
-
-        <div class="mb-3">
-            <label for="ngayKetThuc" class="form-label">Ngày kết thúc</label>
-            <input type="date" th:field="*{ngayKetThuc}" id="ngayKetThuc" class="form-control" required />
-        </div>
-
-        <div class="mb-3">
-            <label for="dieuKien" class="form-label">Điều kiện áp dụng</label>
-            <input type="text" th:field="*{dieuKien}" id="dieuKien" class="form-control" />
-        </div>
-
-        <button type="submit" class="btn btn-success">Lưu</button>
-        <a th:href="@{/admin/promotions}" class="btn btn-secondary">Hủy</a>
-    </form>
+    </div>
 </div>
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

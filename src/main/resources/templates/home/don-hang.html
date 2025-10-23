@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::content})}">
+<th:block th:fragment="content">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+            min-height: 100vh;
+        }
+        
+        .page-wrapper {
+            max-width: 1100px;
+            margin: 60px auto;
+            padding: 20px;
+        }
+        
+        .glass-box {
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            color: #fff;
+        }
+        
+        h3, h5, span.text-danger {
+            color: #fff !important;
+        }
+        
+        .empty-orders {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-orders-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+        
+        .empty-orders h5 {
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .order-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .order-card-body {
+            padding: 25px;
+        }
+        
+        .order-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .order-detail {
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .order-detail h6 {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .order-id {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .order-date {
+            color: #fff;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .order-total {
+            color: #ff6b6b;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        .status-badge {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .status-pending {
+            background: rgba(255, 193, 7, 0.3);
+            border-color: #ffc107;
+            color: #ffc107;
+        }
+        
+        .status-processing {
+            background: rgba(0, 123, 255, 0.3);
+            border-color: #007bff;
+            color: #007bff;
+        }
+        
+        .status-completed {
+            background: rgba(40, 167, 69, 0.3);
+            border-color: #28a745;
+            color: #28a745;
+        }
+        
+        .btn-view-detail {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-view-detail:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-shop {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 50px;
+            color: #fff;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-shop:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+        
+        @media (max-width: 768px) {
+            .order-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .order-detail {
+                min-width: 100%;
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+
+    <div class="page-wrapper">
+        <div class="glass-box">
+            <h3 class="mb-4 text-center fw-bold">
+                <i class="bi bi-bag-check"></i> Đơn hàng của tôi
+            </h3>
+                            <!-- Nếu không có đơn hàng -->
+                            <div th:if="${#lists.isEmpty(danhSachDonHang)}" class="empty-orders">
+                                <div class="empty-orders-icon">📦</div>
+                                <h5>Bạn chưa có đơn hàng nào</h5>
+                                <p>Hãy khám phá các sản phẩm tuyệt vời và đặt hàng ngay!</p>
+                                <a th:href="@{/products}" class="btn-shop mt-3">
+                                    <i class="bi bi-bag me-2"></i>
+                                    Mua sắm ngay
+                                </a>
+                            </div>
+
+                            <!-- Danh sách đơn hàng -->
+                            <div th:if="${!#lists.isEmpty(danhSachDonHang)}">
+                                <div th:each="hoaDon : ${danhSachDonHang}" class="order-card">
+                                    <div class="order-card-body">
+                                        <div class="order-info">
+                                            <div class="order-detail">
+                                                <h6>Mã đơn hàng</h6>
+                                                <span class="order-id" th:text="${hoaDon.maHD}"></span>
+                                            </div>
+                                            
+                                            <div class="order-detail">
+                                                <h6>Ngày đặt</h6>
+                                                <span class="order-date" th:text="${#temporals.format(hoaDon.ngayLap, 'dd/MM/yyyy')}"></span>
+                                            </div>
+                                            
+                                            <div class="order-detail">
+                                                <h6>Tổng tiền</h6>
+                                                <span class="order-total" th:text="${#numbers.formatDecimal(hoaDon.tongTien,0,'COMMA',0,'POINT')} + ' ₫'"></span>
+                                            </div>
+                                            
+                                            <div class="order-detail">
+                                                <h6>Trạng thái</h6>
+                                                <span class="status-badge" 
+                                                      th:classappend="${hoaDon.trangThai == 'Hoàn tất'} ? 'status-completed' : 
+                                                                     (${hoaDon.trangThai == 'Đang giao'} ? 'status-processing' : 'status-pending')"
+                                                      th:text="${hoaDon.trangThai}"></span>
+                                            </div>
+                                            
+                                            <div class="order-detail">
+                                                <h6>Thao tác</h6>
+                                                <a th:href="@{/don-hang/{maHD}(maHD=${hoaDon.maHD})}" 
+                                                   class="btn-view-detail">
+                                                    <i class="bi bi-eye me-1"></i>
+                                                    Xem chi tiết
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+        </div>
+    </div>
+
+</th:block>
+</html>
