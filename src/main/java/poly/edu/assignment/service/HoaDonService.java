@@ -105,5 +105,13 @@ public class HoaDonService {
         hd.setTongTien(total);
         return hdRepo.save(hd);
     }
+    public java.util.Map<String, Long> getOrderStatusStatistics() {
+        java.util.List<HoaDon> orders = findAll();
+        return orders.stream()
+                .collect(java.util.stream.Collectors.groupingBy(
+                        hd -> hd.getTrangThai() != null ? hd.getTrangThai() : "Không xác định",
+                        java.util.stream.Collectors.counting()
+                ));
+    }
 
 }

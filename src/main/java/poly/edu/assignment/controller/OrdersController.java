@@ -42,15 +42,6 @@ public class OrdersController {
     }
 
 
-    @GetMapping
-    public String listOrders(Model model) {
-        model.addAttribute("title", "Quản lý Hóa đơn");
-        model.addAttribute("orders", hoaDonService.findAll());
-        // Trước: model.addAttribute("content", "admin/order :: content");
-        // Trả về thẳng view admin/orders.html
-        return "admin/orders";
-    }
-
     @GetMapping("/create")
     public String createForm(Model model) {
         model.addAttribute("title", "Thêm hóa đơn");
@@ -61,19 +52,74 @@ public class OrdersController {
     }
 
 
+
+    @PostMapping("/change-status")
+    public String updateOrderStatus(@RequestParam String maHD, @RequestParam String trangThai,
+                                    org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
+        try {
+            HoaDon order = hoaDonService.findById(maHD)
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn"));
+
+            String oldStatus = order.getTrangThai();
+            order.setTrangThai(trangThai);
+            hoaDonService.save(order);
+
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "Đã cập nhật trạng thái đơn hàng " + maHD + " từ '" + oldStatus + "' thành '" + trangThai + "'");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Có lỗi xảy ra khi cập nhật trạng thái: " + e.getMessage());
+        }
+
+        return "redirect:/admin/orders";
+    }
+
+    @PostMapping("/update")
+    public String updateOrder(@ModelAttribute("order") HoaDon order) {
+        // Lấy hóa đơn hiện tại từ database
+        HoaDon existingOrder = hoaDonService.findById(order.getMaHD())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn"));
+
+        // Cập nhật các thông tin có thể thay đổi
+        existingOrder.setTrangThai(order.getTrangThai());
+        existingOrder.setTongTien(order.getTongTien());
+        existingOrder.setNgayLap(order.getNgayLap());
+
+        // Cập nhật khách hàng nếu có thay đổi
+        if (order.getKhachHang() != null && order.getKhachHang().getMaKH() != null) {
+            KhachHang kh = khachHangService.findById(order.getKhachHang().getMaKH())
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy khách hàng"));
+            existingOrder.setKhachHang(kh);
+        }
+
+        // Cập nhật nhân viên nếu có thay đổi
+        if (order.getNhanVien() != null && order.getNhanVien().getMaNV() != null) {
+            NhanVien nv = nhanVienService.findById(order.getNhanVien().getMaNV())
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy nhân viên"));
+            existingOrder.setNhanVien(nv);
+        }
+
+        hoaDonService.save(existingOrder);
+        return "redirect:/admin/orders";
+    }
+
+    @GetMapping
+    public String listOrders(Model model) {
+        model.addAttribute("title", "Quản lý Hóa đơn");
+        model.addAttribute("orders", hoaDonService.findAll());
+        model.addAttribute("statusStats", hoaDonService.getOrderStatusStatistics());
+        return "admin/orders";
+    }
+
     @GetMapping("/edit/{maHD}")
     public String editForm(@PathVariable String maHD, Model model) {
         HoaDon order = hoaDonService.findById(maHD)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy hóa đơn"));
         model.addAttribute("title", "Sửa hóa đơn");
         model.addAttribute("order", order);
+        model.addAttribute("khachHangs", khachHangService.findAll());
+        model.addAttribute("nhanViens", nhanVienService.findAll());
         return "admin/order-form";
-    }
-
-    @PostMapping("/update")
-    public String updateOrder(@ModelAttribute("order") HoaDon order) {
-        hoaDonService.save(order);
-        return "redirect:/admin/orders";
     }
 
     @GetMapping("/delete/{maHD}")

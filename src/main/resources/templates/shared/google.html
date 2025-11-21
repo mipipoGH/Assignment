@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="googleButton">
+
+  <a th:href="@{/oauth2/authorization/google}"
+     style="
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          width:260px;
+          padding:12px 16px;
+          border:1px solid #dadce0;
+          border-radius:4px;
+          background-color:#fff;
+          color:#3c4043;
+          text-decoration:none;
+          font-size:14px;
+          font-weight:500;
+          gap:10px;
+       ">
+    <img src="https://developers.google.com/identity/images/g-logo.png"
+         style="width:18px;height:18px;">
+    Sign in with Google
+  </a>
+
+</th:block>
+
+</html>

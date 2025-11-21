@@ -33,22 +33,4 @@ public class AdminController {
 
 
 
-    @GetMapping("/orders/detail/{id}")
-    public String orderDetail(@PathVariable("id") String maHD, Model model) {
-        var hoaDon = hoaDonAdminService.findById(maHD).orElse(null);
-        if (hoaDon == null) {
-            return "redirect:/admin/orders";
-        }
-        model.addAttribute("order", hoaDon);
-        model.addAttribute("details", hoaDon.getChiTiet());
-        return "admin/order-detail";
-    }
-
-    // 🌀 Cập nhật trạng thái đơn hàng (Admin đổi trạng thái)
-    @PostMapping("/orders/update-status")
-    public String updateOrderStatus(@RequestParam String maHD, @RequestParam String trangThai) {
-        hoaDonAdminService.updateStatus(maHD, trangThai);
-        return "redirect:/admin/orders/detail/" + maHD;
-    }
-
 }

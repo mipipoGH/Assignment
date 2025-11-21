@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::content})}">
+<th:block th:fragment="content">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+            min-height: 100vh;
+        }
+        
+        .page-wrapper {
+            max-width: 1100px;
+            margin: 60px auto;
+            padding: 20px;
+        }
+        
+        .glass-box {
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            color: #fff;
+        }
+        
+        h3, h4, h5, span.text-danger {
+            color: #fff !important;
+        }
+        
+        .info-section {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .info-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+        }
+        
+        .info-value {
+            font-weight: 700;
+            color: #ff6b6b;
+            font-size: 1.1rem;
+        }
+        
+        .order-id-display {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .status-badge-large {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .products-table {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .products-table thead {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .products-table th {
+            padding: 20px 15px;
+            font-weight: 600;
+            border: none;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .products-table td {
+            padding: 20px 15px;
+            border: none;
+            vertical-align: middle;
+            font-size: 1rem;
+            color: #fff;
+        }
+        
+        .products-table tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .products-table tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .products-table tbody tr:last-child {
+            border-bottom: none;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .price-text {
+            font-weight: 600;
+            color: #4caf50;
+        }
+        
+        .quantity-display {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            display: inline-block;
+            min-width: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .total-section {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 30px 0;
+            backdrop-filter: blur(10px);
+        }
+        
+        .total-label {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        
+        .total-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ff6b6b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .action-buttons {
+            text-align: center;
+            padding-top: 20px;
+        }
+        
+        .btn-back {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            color: white;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 10px;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .btn-shop {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            color: #fff;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 10px;
+        }
+        
+        .btn-shop:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+        
+        @media (max-width: 768px) {
+            .info-row {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            
+            .products-table {
+                font-size: 0.9rem;
+            }
+            
+            .products-table th,
+            .products-table td {
+                padding: 15px 10px;
+            }
+        }
+    </style>
+
+    <div class="page-wrapper">
+        <div class="glass-box">
+            <h3 class="mb-4 text-center fw-bold">
+                <i class="bi bi-receipt"></i> Chi tiết đơn hàng
+            </h3>
+                            <!-- Thông tin đơn hàng -->
+                            <div class="info-section">
+                                <h4 class="text-center mb-4" style="color: #2c3e50; font-weight: 700;">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    Thông tin đơn hàng
+                                </h4>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="info-row">
+                                            <span class="info-label">
+                                                <i class="bi bi-hash me-2"></i>Mã đơn hàng:
+                                            </span>
+                                            <span class="order-id-display" th:text="${hoaDon.maHD}"></span>
+                                        </div>
+                                        
+                                        <div class="info-row">
+                                            <span class="info-label">
+                                                <i class="bi bi-calendar me-2"></i>Ngày đặt:
+                                            </span>
+                                            <span class="info-value" th:text="${#temporals.format(hoaDon.ngayLap, 'dd/MM/yyyy')}"></span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="info-row">
+                                            <span class="info-label">
+                                                <i class="bi bi-person me-2"></i>Khách hàng:
+                                            </span>
+                                            <span class="info-value" th:text="${hoaDon.khachHang.hoTen}"></span>
+                                        </div>
+                                        
+                                        <div class="info-row">
+                                            <span class="info-label">
+                                                <i class="bi bi-info-circle me-2"></i>Trạng thái:
+                                            </span>
+                                            <span class="status-badge-large" th:text="${hoaDon.trangThai}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Chi tiết sản phẩm -->
+                            <h4 class="mb-4" style="color: #2c3e50; font-weight: 700;">
+                                <i class="bi bi-box me-2"></i>
+                                Chi tiết sản phẩm
+                            </h4>
+                            
+                            <div class="products-table">
+                                <table class="table mb-0">
+                                    <thead>
+                                    <tr>
+                                        <th>Sản phẩm</th>
+                                        <th>Đơn giá</th>
+                                        <th>Số lượng</th>
+                                        <th>Thành tiền</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="chiTiet : ${hoaDon.chiTiet}">
+                                        <td>
+                                            <span class="product-name" th:text="${chiTiet.sanPham.tenSP}"></span>
+                                        </td>
+                                        <td>
+                                            <span class="price-text" th:text="${#numbers.formatDecimal(chiTiet.donGia,0,'COMMA',0,'POINT')} + ' ₫'"></span>
+                                        </td>
+                                        <td>
+                                            <span class="quantity-display" th:text="${chiTiet.soLuong}"></span>
+                                        </td>
+                                        <td>
+                                            <span class="price-text fw-bold" th:text="${#numbers.formatDecimal(chiTiet.thanhTien,0,'COMMA',0,'POINT')} + ' ₫'"></span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Tổng tiền -->
+                            <div class="total-section">
+                                <div class="total-label">Tổng cộng</div>
+                                <div class="total-amount" th:text="${#numbers.formatDecimal(hoaDon.tongTien,0,'COMMA',0,'POINT')} + ' ₫'"></div>
+                            </div>
+
+                            <!-- Nút thao tác -->
+                            <div class="action-buttons">
+                                <a th:href="@{/don-hang}" class="btn-back">
+                                    <i class="bi bi-arrow-left me-2"></i>
+                                    Quay lại danh sách
+                                </a>
+                                <a th:href="@{/products}" class="btn-shop">
+                                    <i class="bi bi-bag me-2"></i>
+                                    Tiếp tục mua sắm
+                                </a>
+                            </div>
+        </div>
+    </div>
+
+</th:block>
+</html>
